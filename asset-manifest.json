@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/MapDots/static/css/main.cfc15909.css",
+    "main.js": "/MapDots/static/js/main.ce3d519b.js",
+    "static/media/Roboto-Regular.ttf": "/MapDots/static/media/Roboto-Regular.a8d6ac03c7b96b7acb62.ttf",
+    "index.html": "/MapDots/index.html",
+    "main.cfc15909.css.map": "/MapDots/static/css/main.cfc15909.css.map",
+    "main.ce3d519b.js.map": "/MapDots/static/js/main.ce3d519b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cfc15909.css",
+    "static/js/main.ce3d519b.js"
+  ]
+}
