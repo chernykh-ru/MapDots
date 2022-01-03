@@ -1,0 +1,60 @@
+$border-style: 1px solid lightgrey;
+
+.sidebar {
+  height: 100%;
+  min-width: 220px;
+  max-width: 20%;
+  border-right: $border-style;
+  padding: 10px;
+  position: relative;
+  background: white;
+  z-index: 3;
+}
+.sidebar_container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.sidebar_list_container {
+  height: 80%;
+  text-align: center;
+  overflow-y: scroll;
+}
+
+.sidebar_input {
+  border: 0;
+  width: 100%;
+  line-height: 1.5em;
+  font-family: 'Roboto';
+  font-size: 1em;
+  font-weight: 400;
+  border-bottom: $border-style;
+  margin: 0.5em 0;
+  text-align: center;
+  transition: all 0.3s;
+  &:focus {
+    box-shadow: 0 2px 2px lightgray;
+    outline: 0;
+  }
+}
+
+.button {
+  font-family: 'Roboto';
+  font-size: 0.8em;
+  font-weight: 400;
+  background-color: transparent;
+  width: 100%;
+  border-radius: 20px;
+  border: $border-style;
+  padding: 5px 5px;
+  margin: 0.5em 0;
+  transition: all 0.3s;
+  &:hover {
+    background-color: lightgray;
+  }
+  &:focus {
+    outline: 0;
+  }
+}

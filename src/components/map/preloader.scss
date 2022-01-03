@@ -1,0 +1,111 @@
+#cssload-global {
+  width: 68px;
+  margin: auto;
+  margin-top: 49px;
+  position: relative;
+  cursor: pointer;
+  height: 58px;
+}
+
+.cssload-mask {
+  position: absolute;
+  border-radius: 2px;
+  overflow: hidden;
+  perspective: 1000;
+  backface-visibility: hidden;
+}
+
+.cssload-plane {
+  background: rgb(170, 170, 170);
+  width: 400%;
+  height: 100%;
+  position: absolute;
+  z-index: 100;
+  transform: translate3d(0px, 0, 0);
+  perspective: 1000;
+  backface-visibility: hidden;
+}
+
+#cssload-top .cssload-plane {
+  z-index: 2000;
+  animation: cssload-trans1 1.5s ease-in infinite 0s backwards;
+}
+
+#cssload-middle .cssload-plane {
+  background: rgb(0, 0, 0);
+  transform: translate3d(0px, 0, 0);
+  animation: cssload-trans2 1.5s linear infinite 0.35s backwards;
+}
+
+#cssload-bottom .cssload-plane {
+  z-index: 2000;
+  animation: cssload-trans3 1.5s ease-out infinite 0.81s backwards;
+}
+
+#cssload-top {
+  width: 52px;
+  height: 19px;
+  left: 19px;
+  transform: skew(-15deg, 0);
+  z-index: 100;
+}
+
+#cssload-middle {
+  width: 32px;
+  height: 19px;
+  left: 19px;
+  top: 15px;
+  transform: skew(-15deg, 40deg);
+}
+
+#cssload-bottom {
+  width: 52px;
+  height: 19px;
+  top: 29px;
+  transform: skew(-15deg, 0);
+}
+
+@keyframes cssload-trans1 {
+  from {
+    transform: translate3d(52px, 0, 0);
+  }
+  to {
+    transform: translate3d(-244px, 0, 0);
+  }
+}
+
+@keyframes cssload-trans2 {
+  from {
+    transform: translate3d(-156px, 0, 0);
+  }
+  to {
+    transform: translate3d(52px, 0, 0);
+  }
+}
+
+@keyframes cssload-trans3 {
+  from {
+    transform: translate3d(52px, 0, 0);
+  }
+  to {
+    transform: translate3d(-214px, 0, 0);
+  }
+}
+
+@keyframes cssload-animColor {
+  from {
+    background: red;
+  }
+  25% {
+    background: yellow;
+  }
+  50% {
+    background: green;
+  }
+  75% {
+    background: brown;
+  }
+  to {
+    background: blue;
+  }
+}
