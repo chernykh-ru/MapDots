@@ -5,14 +5,6 @@ import Map from './map/map';
 import Sidebar from './sidebar/sidebar';
 import Preloader from './map/preloader';
 
-class Dot {
-  constructor(coordinates, name, id) {
-    this.coordinates = coordinates;
-    this.name = name;
-    this.id = id;
-  }
-}
-
 const AppContainer = () => {
   const [state, setState] = useState({
     Dots: [],
@@ -21,28 +13,21 @@ const AppContainer = () => {
   const [idDotCoords, setIdDotCoords] = useState(null); //draggable Dots id from dragStart
   const [DotCoords, setDotCoords] = useState(centerCoords); //draggable Dots coords from dragEnd
   const [id, setId] = useState(1); //new Dot id
-  let [draggedItem, setDraggedItem] = useState(null); //state draggable item in list
-  let changeDotIndex = null;
+  const [draggedItem, setDraggedItem] = useState(null); //state draggable item in list
 
   useEffect(() => {
     updateDotCoords(DotCoords, idDotCoords);
   }, [DotCoords]);
 
-  const computeIndex = (idDotCoords) => {
-    let newDotsArray = [...state.Dots];
-    for (let i = 0; i < newDotsArray.length; i++) {
-      if (newDotsArray[i].id === idDotCoords) {
-        changeDotIndex = i;
-        console.log('changeDotIndex', changeDotIndex);
-        return changeDotIndex;
-      }
-    }
-  };
-
-  const addNewDot = (DotName) => {
-    let coords = centerCoords;
-    let newDot = new Dot(coords, DotName, id); //создаем инстанс класса Поинт
-    setState({ Dots: state.Dots.concat(newDot) }); //сетаем в стейт конкатенируя Поинты
+  const addNewDot = (dotName) => {
+    setState(({ Dots }) => {
+      const newDot = {
+        coordinates: centerCoords,
+        id: id,
+        name: dotName,
+      };
+      return { Dots: [...Dots, newDot] };
+    }); //добавляем новую точку в массив не мутируя его(в конец списка)
     setId((id) => id + 1);
   };
 
@@ -51,38 +36,40 @@ const AppContainer = () => {
   };
 
   const deleteDot = (idDotCoords) => {
-    let newDotsArray = [...state.Dots];
-    computeIndex(idDotCoords); //return changeDotIndex
-
-    newDotsArray.splice(changeDotIndex, 1); //мутируем массив стартуя с индекса по найденому id и удаляя этот один элемент
-    setState({ Dots: newDotsArray });
+    setState(({ Dots }) => {
+      const idx = Dots.findIndex((el) => el.id === idDotCoords); //получаем индекс нужного элемента по id
+      const newArray = [...Dots.slice(0, idx), ...Dots.slice(idx + 1)]; //получаем копии элементов от начала и до индекса удаления не включая его, //получаем копии элементов после индекса удаления
+      return { Dots: newArray }; //иммутабельно меняем стейт(сетаем в стейт копии, не мутируя исходный массив)
+    });
   };
 
   const updateDotCoords = (DotCoords, idDotCoords) => {
     if (DotCoords && idDotCoords) {
-      let newDotsArray = [...state.Dots];
-      computeIndex(idDotCoords); //return changeDotIndex
-
-      if (newDotsArray) newDotsArray[changeDotIndex].coordinates = DotCoords;
-      setState({ Dots: newDotsArray });
+      setState(({ Dots }) => {
+        const idx = Dots.findIndex((el) => el.id === idDotCoords); //получаем индекс нужного элемента по id
+        const draggableDot = { ...Dots[idx], coordinates: DotCoords }; //обновляем у нужного объекта нужное поле координат на новое значение координат
+        const newArray = [...Dots.slice(0, idx), draggableDot, ...Dots.slice(idx + 1)]; //создаем копию с измененным элементом массива
+        return { Dots: newArray }; //иммутабельно меняем стейт
+      });
     }
   };
 
   const onDragStart = (idDotCoords) => {
-    computeIndex(idDotCoords); //return changeDotIndex
-    const draggedItem = state.Dots[changeDotIndex];
+    const idx = state.Dots.findIndex((el) => el.id === idDotCoords); //получаем индекс нужного элемента по id
+    const draggedItem = state.Dots[idx];
     setDraggedItem(draggedItem); //сетаем перетаскиваемый элемент
   };
 
   const onDragOver = (idDotCoords) => {
-    computeIndex(idDotCoords); //return changeDotIndex
+    const idx = state.Dots.findIndex((el) => el.id === idDotCoords); //получаем индекс нужного элемента по id
+    const draggedOverItem = state.Dots[idx]; //dragOver: курсор мыши наведен на данный элемент при перетаскивании элемента dragStart
+    if (draggedOverItem === draggedItem) return; //выходим если элемент остался на прежнем месте в списке
 
-    const draggedOverItem = state.Dots[changeDotIndex];
-    if (draggedOverItem === draggedItem) return;
-
-    let mixedArray = state.Dots.filter((Dot) => Dot !== draggedItem);
-    mixedArray.splice(changeDotIndex, 0, draggedItem); //вставляем в нужное место масива(по id) перетаскиваемый элемент
-    setState({ Dots: mixedArray });
+    setState(({ Dots }) => {
+      const mixedArray = Dots.filter((Dot) => Dot !== draggedItem); //возвращаем новый массив без перетаскиваемого элемента
+      const newArray = [...mixedArray.slice(0, idx), draggedItem, ...mixedArray.slice(idx)]; //создаем копию с перетащенным элементом массива на нужном месте в массиве
+      return { Dots: newArray }; //иммутабельно меняем стейт
+    });
   };
 
   const onDragEnd = () => {
